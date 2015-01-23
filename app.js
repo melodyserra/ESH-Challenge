@@ -5,17 +5,33 @@ app.set("view engine", "ejs");
 
 app.use(express.static('assets'));
 
-//MySQL Connection
+//Postgres Connection
 
-var mysql = require("mysql");
-var my_sql = mysql.createConnection({
-	host: "localhost",
-	user: "root",
-	password: "",
-	database: "esh_schools"
-});
+var pg = require("pg");
 
-my_sql.connect();
+var postgres = {};
+
+postgres.config = {
+    database: "esh_schools",
+    port: 5432,
+    host: "localhost"
+};
+
+postgres.connect = function(runAfterConnecting) {
+    pg.connect(postgres.config, function(err, client, done){
+        if (err) {
+            console.error("Something went wrong.", err);
+        }
+        runAfterConnecting(client);
+        done();
+    });
+};
+
+postgres.query = function(statement, params, callback){
+    postgres.connect(function(client){
+        client.query(statement, params, callback);
+    });
+};
 
 //MongoDB Connection
 
@@ -49,9 +65,13 @@ app.get("/", function(req, res) {
 	//Get data from MySQL
 
 	console.log("mysql running");
-	my_sql.query("SELECT * FROM schools", function(err, schools, fields) {
+	postgres.query("SELECT * FROM schools", function(err, school_results) {
+		var schools = school_results.rows;
+
 		schools.forEach(function(school) {
-			my_sql.query("SELECT * FROM school_purchases", function(err, purchases, fields) {
+			postgres.query("SELECT * FROM school_purchases", function(err, purchase_results) {
+				var purchases = purchase_results.rows;
+
 				var purchase_number = purchases.length;
 
 				var temp_purchases = [];
@@ -108,7 +128,7 @@ app.get("/", function(req, res) {
 		res.render("index", {
 			chart_data: full_data
 		});
-	}, 3000);
+	}, 1000);
 });
 
 //Start the server

@@ -9,10 +9,10 @@
   "author": "Melody Serra",
   "license": "BSD-2-Clause",
   "dependencies": {
+    "ejs": "~2.2.2",
+    "express": "~4.11.1",
     "mongo": "~0.1.0",
     "mongodb": "~1.4.29",
-    "express": "~4.11.1",
-    "mysql": "~2.5.4",
-    "ejs": "~2.2.2"
+    "pg": "^4.2.0"
   }
 }
