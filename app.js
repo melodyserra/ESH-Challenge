@@ -66,7 +66,6 @@ app.get("/", function(req, res) {
 
 	//Get data from MySQL
 
-	console.log("mysql running");
 	postgres.query("SELECT * FROM schools", function(err, school_results) {
 		var schools = school_results.rows;
 
@@ -98,7 +97,6 @@ app.get("/", function(req, res) {
 
 	//Get data from Mongo
 
-	console.log("mongo running");
 	var organizations = mongo.collection("organizations");
 
 	organizations.find({}).toArray(function(err, schools) {

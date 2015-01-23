@@ -1,5 +1,10 @@
 function initChart(dataset) {
-	var ctx = document.getElementById("bandwidth-chart").getContext("2d");
+	var chart = document.getElementById("bandwidth-chart");
+
+	chart.setAttribute("height", window.innerHeight - 20);
+	chart.setAttribute("width", window.innerWidth - 20);
+
+	var ctx = chart.getContext("2d");
 
 	var chart_labels = [];
 	var chart_points = [];
